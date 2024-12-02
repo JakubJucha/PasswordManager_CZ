@@ -1,0 +1,37 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PasswordManager"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="PasswordManager.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <DockPanel>
+        <!-- Panel boczny -->
+        <DockPanel DockPanel.Dock="Left" Width="Auto" Background="LightGray">
+            <Grid>
+                <!-- Definicje wierszy -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <!-- Główna przestrzeń (zajmuje resztę miejsca) -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Przycisk Wyloguj na dole -->
+                </Grid.RowDefinitions>
+
+                <!-- Główne przyciski w pierwszym wierszu -->
+                <StackPanel Grid.Row="0">
+                    <Button x:Name="btnNavPasswords" Content="Hasła" Command="{Binding NavigateCommand}" CommandParameter="Passwords" Margin="10" Height="40" IsEnabled="False"/>
+                    <Button x:Name="btnNavOptions" Content="Opcje" Command="{Binding NavigateCommand}" CommandParameter="Options" Margin="10" Height="40" IsEnabled="False"/>
+                </StackPanel>
+
+                <!-- Przycisk Wyloguj w drugim wierszu -->
+                <Button x:Name="btnNavLogout" Content="Wyloguj" Command="{Binding NavigateCommand}" CommandParameter="Logout"
+                Margin="10" Height="40" Grid.Row="1" IsEnabled="False" />
+            </Grid>
+        </DockPanel>
+
+        <!-- Główna zawartość -->
+        <ContentControl Content="{Binding CurrentView}" Background="White"/>
+    </DockPanel>
+</Window>

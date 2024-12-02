@@ -1,0 +1,39 @@
+﻿<Window x:Class="PasswordManager.Views.NewProfileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PasswordManager.Views"
+        mc:Ignorable="d"
+     Title="Nowy Profil" Height="200" Width="300" WindowStartupLocation="CenterOwner">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Nazwa profilu -->
+        <TextBlock Text="Nazwa profilu:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="5"/>
+        <TextBox x:Name="txtProfileName" Grid.Row="0" Grid.Column="1" Margin="5" />
+
+        <!-- Hasło -->
+        <TextBlock Text="Hasło:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="5"/>
+        <PasswordBox x:Name="txtPassword" Grid.Row="1" Grid.Column="1" Margin="5" />
+
+        <!-- Potwierdzenie hasła -->
+        <TextBlock Text="Potwierdź hasło:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="5"/>
+        <PasswordBox x:Name="txtConfirmPassword" Grid.Row="2" Grid.Column="1" Margin="5" />
+
+        <!-- Przyciski -->
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
+            <Button Content="Utwórz" Width="75" Margin="5" Click="btnCreate_Click" />
+            <Button Content="Anuluj" Width="75" Margin="5" Click="btnCancel_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
