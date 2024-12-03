@@ -53,6 +53,7 @@ namespace PasswordManager.Views
                 return;
             }
 
+            ProfileName = name;
             ProfilePassword = password;
             DialogResult = true;
             Close();
