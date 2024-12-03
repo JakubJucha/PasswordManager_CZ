@@ -33,10 +33,8 @@ namespace PasswordManager.Views
 
         private void btnNewProfile_Click(object sender, RoutedEventArgs e)
         {
-
             NewProfileWindow newProfileWindow = new NewProfileWindow();
 
-            // Otwórz okno dialogowe
             Application.Current.MainWindow?.Dispatcher.Invoke(() =>
             {
                 newProfileWindow.Owner = Application.Current.MainWindow;
@@ -44,19 +42,25 @@ namespace PasswordManager.Views
 
             if (newProfileWindow.ShowDialog() == true)
             {
-                // Tworzenie pliku profilu
-                string profilePath = System.IO.Path.Combine(ProfilesDirectory, $"{newProfileWindow.ProfileName}.psmgr");
-                string hashedPassword = HashPassword(newProfileWindow.ProfilePassword);
+                if (!Directory.Exists(ProfilesDirectory))
+                {
+                    Directory.CreateDirectory(ProfilesDirectory);
+                }
 
-                // Zapisz zaszyfrowane hasło do pliku
+                string profilePath = System.IO.Path.Combine(ProfilesDirectory, $"{newProfileWindow.ProfileName}.psmgr");
+
+                // Hashowanie hasła do profilu
+                var encryptionManager = new EncryptionManager(EncryptionMethod.SHA256);
+                string hashedPassword = encryptionManager.Hash(newProfileWindow.ProfilePassword);
+
                 File.WriteAllText(profilePath, hashedPassword);
 
-                // Dodaj nowy profil do ComboBox
                 cbxProfileSelector.Items.Add(newProfileWindow.ProfileName);
 
                 MessageBox.Show($"Profil '{newProfileWindow.ProfileName}' został utworzony.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
 
         // Załaduj profile do ComboBox
         private void LoadProfiles()
@@ -76,6 +80,7 @@ namespace PasswordManager.Views
                 cbxProfileSelector.Items.Add(System.IO.Path.GetFileNameWithoutExtension(file));
             }
         }
+
 
 
         // Obsługa przycisku Zaloguj
@@ -129,23 +134,25 @@ namespace PasswordManager.Views
                 return false;
             }
 
-            // Odczytaj zaszyfrowane hasło z pliku
+            // Odczytaj zaszyfrowane hasło z pliku (pierwsza linia)
             string storedHash = File.ReadLines(profilePath).First();
-            string enteredHash = HashPassword(password);
 
-            // Porównaj hasło z pliku z wpisanym hasłem
-            return storedHash == enteredHash;
+            // Utwórz EncryptionManager dla SHA256
+            var encryptionManager = new EncryptionManager(EncryptionMethod.SHA256);
+
+            // Porównaj wprowadzone hasło z zapisanym
+            return encryptionManager.VerifyHash(password, storedHash);
         }
 
         // Funkcja do haszowania hasła
-        private string HashPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashBytes);
-            }
-        }
+        //private string HashPassword(string password)
+        //{
+        //    using (SHA256 sha256 = SHA256.Create())
+        //    {
+        //        byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+        //        return Convert.ToBase64String(hashBytes);
+        //    }
+        //}
 
     }
 }

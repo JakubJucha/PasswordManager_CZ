@@ -53,12 +53,9 @@ namespace PasswordManager.Views
                 return;
             }
 
-            // Zapisz dane profilu
+            // Przekaż dane do LoginView
             ProfileName = name;
             ProfilePassword = password;
-
-            // Utwórz plik profilu
-            SaveProfileFile(name, password);
 
             DialogResult = true;
             Close();
@@ -70,21 +67,14 @@ namespace PasswordManager.Views
             Close();
         }
 
-        private void SaveProfileFile(string name, string password)
-        {
-            string profilePath = $"{name}.psmgr";
-            string encryptedPassword = EncryptPassword(password);
 
-            File.WriteAllText(profilePath, encryptedPassword);
-        }
-
-        private string EncryptPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
-            }
-        }
+        //private string EncryptPassword(string password)
+        //{
+        //    using (SHA256 sha256 = SHA256.Create())
+        //    {
+        //        byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+        //        return Convert.ToBase64String(hashedBytes);
+        //    }
+        //}
     }
 }

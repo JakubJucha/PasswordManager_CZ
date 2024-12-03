@@ -65,14 +65,23 @@ namespace PasswordManager
 
         private void PasswordsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Pobierz wybrany wiersz
             var selectedEntry = PasswordsGrid.SelectedItem as PasswordEntry;
 
             if (selectedEntry != null)
             {
-                // Skopiuj nazwę do schowka (na przykład)
-                Clipboard.SetText(selectedEntry.Password);
-                MessageBox.Show($"Skopiowano hasło", "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
+                try
+                {
+                    var encryptionManager = new EncryptionManager(EncryptionMethod.AES);
+                    var decryptedPassword = encryptionManager.Decrypt(selectedEntry.Password, CurrentProfile.ProfilePassword);
+
+
+                    Clipboard.SetText(decryptedPassword);
+                   
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Błąd podczas odszyfrowywania hasła: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }
