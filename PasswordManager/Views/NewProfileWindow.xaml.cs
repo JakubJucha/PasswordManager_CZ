@@ -53,10 +53,7 @@ namespace PasswordManager.Views
                 return;
             }
 
-            // Przekaż dane do LoginView
-            ProfileName = name;
             ProfilePassword = password;
-
             DialogResult = true;
             Close();
         }

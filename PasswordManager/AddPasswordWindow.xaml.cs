@@ -31,7 +31,7 @@ namespace PasswordManager
         {
             PasswordName = txtName.Text;
             PasswordDescription = txtDescription.Text;
-            Password = txtPassword.Password; // Pobierz hasło z pola
+            Password = txtPassword.Password; 
 
             if (string.IsNullOrEmpty(PasswordName) || string.IsNullOrEmpty(Password))
             {
@@ -44,7 +44,7 @@ namespace PasswordManager
         }
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            // Anuluj i zamknij okno
+         
             DialogResult = false;
             Close();
         }

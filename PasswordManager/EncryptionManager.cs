@@ -7,8 +7,8 @@ namespace PasswordManager
 {
     public enum EncryptionMethod
     {
-        SHA256, // Hashowanie, np. hasło do profilu
-        AES // Szyfrowanie i odszyfrowywanie haseł
+        SHA256,
+        AES 
     }
 
     public class EncryptionManager
@@ -20,7 +20,7 @@ namespace PasswordManager
             _method = method;
         }
 
-        // Hashowanie danych
+       
         public string Hash(string input)
         {
             switch (_method)
@@ -32,13 +32,13 @@ namespace PasswordManager
             }
         }
 
-        // Porównywanie hasza
+     
         public bool VerifyHash(string input, string hash)
         {
             return Hash(input) == hash;
         }
 
-        // Szyfrowanie danych (np. hasła do stron)
+      
         public string Encrypt(string input, string key)
         {
             switch (_method)
@@ -50,7 +50,7 @@ namespace PasswordManager
             }
         }
 
-        // Odszyfrowywanie danych (np. hasła do stron)
+      
         public string Decrypt(string encryptedInput, string key)
         {
             switch (_method)
@@ -62,7 +62,7 @@ namespace PasswordManager
             }
         }
 
-        // Implementacja hashowania SHA256
+      
         private string HashSHA256(string input)
         {
             using (var sha256 = SHA256.Create())
@@ -72,7 +72,7 @@ namespace PasswordManager
             }
         }
 
-        // Implementacja szyfrowania AES
+      
         private string EncryptAES(string plainText, string key)
         {
             using (var aes = Aes.Create())
@@ -92,7 +92,7 @@ namespace PasswordManager
             }
         }
 
-        // Implementacja odszyfrowywania AES
+    
         private string DecryptAES(string encryptedInput, string key)
         {
             var parts = encryptedInput.Split('|');
@@ -109,7 +109,7 @@ namespace PasswordManager
 
             using (var aes = Aes.Create())
             {
-                aes.Key = GenerateKey(key); // Upewnij się, że klucz ma odpowiednią długość
+                aes.Key = GenerateKey(key); 
                 aes.IV = iv;
 
                 using var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
@@ -118,7 +118,6 @@ namespace PasswordManager
             }
         }
 
-        // Generowanie klucza dla AES (z hasła profilu)
         private byte[] GenerateKey(string key)
         {
             using (var sha256 = SHA256.Create())

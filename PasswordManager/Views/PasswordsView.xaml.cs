@@ -29,7 +29,7 @@ namespace PasswordManager
 
         private void PasswordsView_Loaded(object sender, RoutedEventArgs e)
         {
-            // Pobierz aktualny profil z MainViewModel
+           
             var mainWindow = Window.GetWindow(this) as MainWindow;
             if (mainWindow != null)
             {
@@ -38,7 +38,7 @@ namespace PasswordManager
                 {
                     CurrentProfile = mainViewModel.CurrentProfile;
 
-                    // Załaduj hasła do tabeli
+                  
                     CurrentProfile.LoadPasswords();
                     PasswordsGrid.ItemsSource = CurrentProfile.Passwords;
                 }
@@ -50,14 +50,14 @@ namespace PasswordManager
             var addPasswordWindow = new AddPasswordWindow();
             if (addPasswordWindow.ShowDialog() == true)
             {
-                // Dodaj hasło do aktualnego profilu
+              
                 CurrentProfile.AddPassword(
                     addPasswordWindow.PasswordName,
                     addPasswordWindow.PasswordDescription,
                     addPasswordWindow.Password // Pobierz hasło
                 );
 
-                // Odśwież tabelę
+               
                 PasswordsGrid.ItemsSource = null;
                 PasswordsGrid.ItemsSource = CurrentProfile.Passwords;
             }
@@ -71,12 +71,32 @@ namespace PasswordManager
             {
                 try
                 {
+                  
                     var encryptionManager = new EncryptionManager(EncryptionMethod.AES);
-                    var decryptedPassword = encryptionManager.Decrypt(selectedEntry.Password, CurrentProfile.ProfilePassword);
+                    string decryptedPassword = encryptionManager.Decrypt(selectedEntry.Password, CurrentProfile.ProfilePassword);
 
-
-                    Clipboard.SetText(decryptedPassword);
                    
+                    Clipboard.SetText(decryptedPassword);
+
+                    MessageBox.Show("Skopiowano odszyfrowane hasło. Zostanie usunięte ze schowka po 30 sekundach.",
+                        "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                  
+                    var timer = new System.Windows.Threading.DispatcherTimer
+                    {
+                        Interval = TimeSpan.FromSeconds(30) 
+                    };
+
+                    timer.Tick += (s, args) =>
+                    {
+                      
+                        Clipboard.Clear();
+
+                      
+                        timer.Stop();
+                    };
+
+                    timer.Start();
                 }
                 catch (Exception ex)
                 {

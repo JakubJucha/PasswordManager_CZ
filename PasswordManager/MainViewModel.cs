@@ -30,10 +30,10 @@ namespace PasswordManager
 
         public MainViewModel()
         {
-            // Ustaw domyślny widok
+          
             CurrentView = new LoginView();
 
-            // Obsługa nawigacji
+
             NavigateCommand = new RelayCommand(Navigate);
         }
 

@@ -11,24 +11,20 @@ namespace PasswordManager
 {
     public class ProfileInfo
     {
-        // Nazwa aktualnie wybranego profilu
+    
         public string ProfileName { get; set; }
 
         public static readonly string ProfilesDirectory = "Profiles";
-        // Ścieżka do pliku profilu
+    
         public string ProfilePath => Path.Combine(ProfilesDirectory, $"{ProfileName}.psmgr");
 
 
-        // Opcjonalne ustawienia związane z profilem
-        public string EncryptionMethod { get; set; } = "SHA256";
-
-        // Lista zapisanych haseł
         public List<PasswordEntry> Passwords { get; private set; } = new List<PasswordEntry>();
 
-        // Hasło do profilu (przechowywane w pierwszej linii pliku)
+       
         public string ProfilePassword { get; private set; }
 
-        // Wczytaj dane z pliku
+      
         public void LoadPasswords()
         {
             if (!File.Exists(ProfilePath))
@@ -42,7 +38,7 @@ namespace PasswordManager
 
             if (lines.Length > 0)
             {
-                ProfilePassword = lines[0]; // Pierwsza linia: hasło profilu
+                ProfilePassword = lines[0]; 
             }
 
             Passwords.Clear();
@@ -51,33 +47,33 @@ namespace PasswordManager
             for (int i = 1; i < lines.Length; i++)
             {
                 var parts = lines[i].Split('|');
-                if (parts.Length == 4) // Zakładamy format: Name|Description|IV|CipherText
+                if (parts.Length == 4) //Name|Description|IV|CipherText
                 {
                     Passwords.Add(new PasswordEntry
                     {
                         Name = parts[0],
                         Description = parts[1],
-                        Password = $"{parts[2]}|{parts[3]}", // Trzymamy zaszyfrowane hasło
-                        DateAdded = DateTime.Now // Data nie jest odczytywana z pliku, możesz to zmienić
+                        Password = $"{parts[2]}|{parts[3]}", 
+                        DateAdded = DateTime.Now 
                     });
                 }
             }
         }
 
 
-        // Zapisz dane do pliku
+    
         public void SavePasswords()
         {
             var lines = new List<string>
-    {
-        ProfilePassword // Pierwsza linia: hasło profilu
-    };
+            {
+                ProfilePassword 
+            };
 
             foreach (var entry in Passwords)
             {
-                // Upewnij się, że hasło jest już zaszyfrowane
+            
                 lines.Add(entry.Password.Contains('|')
-                    ? $"{entry.Name}|{entry.Description}|{entry.Password}" // Zapisujemy zaszyfrowane dane w oryginalnym formacie
+                    ? $"{entry.Name}|{entry.Description}|{entry.Password}" 
                     : throw new InvalidOperationException("Hasło nie jest zaszyfrowane przed zapisem."));
             }
 
@@ -93,7 +89,7 @@ namespace PasswordManager
             {
                 Name = name,
                 Description = description,
-                Password = encryptedPassword, // Trzymamy zaszyfrowaną formę w pamięci
+                Password = encryptedPassword, 
                 DateAdded = DateTime.Now
             };
 
@@ -101,7 +97,7 @@ namespace PasswordManager
             SavePasswords();
         }
 
-        // Usuń hasło
+      
         public void RemovePassword(PasswordEntry entry)
         {
             Passwords.Remove(entry);
@@ -109,7 +105,6 @@ namespace PasswordManager
         }
     }
 
-    // Klasa reprezentująca pojedyncze hasło
     public class PasswordEntry
     {
         public string Name { get; set; }

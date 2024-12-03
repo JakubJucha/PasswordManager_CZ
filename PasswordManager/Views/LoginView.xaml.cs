@@ -49,7 +49,7 @@ namespace PasswordManager.Views
 
                 string profilePath = System.IO.Path.Combine(ProfilesDirectory, $"{newProfileWindow.ProfileName}.psmgr");
 
-                // Hashowanie hasła do profilu
+        
                 var encryptionManager = new EncryptionManager(EncryptionMethod.SHA256);
                 string hashedPassword = encryptionManager.Hash(newProfileWindow.ProfilePassword);
 
@@ -62,7 +62,7 @@ namespace PasswordManager.Views
         }
 
 
-        // Załaduj profile do ComboBox
+      
         private void LoadProfiles()
         {
             if (!Directory.Exists(ProfilesDirectory))
@@ -70,10 +70,10 @@ namespace PasswordManager.Views
                 Directory.CreateDirectory(ProfilesDirectory);
             }
 
-            // Wyczyść ComboBox
+          
             cbxProfileSelector.Items.Clear();
 
-            // Pobierz listę profili
+            
             var profileFiles = Directory.GetFiles(ProfilesDirectory, "*.psmgr");
             foreach (var file in profileFiles)
             {
@@ -83,7 +83,7 @@ namespace PasswordManager.Views
 
 
 
-        // Obsługa przycisku Zaloguj
+        
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             string selectedProfile = cbxProfileSelector.Text;
@@ -123,7 +123,7 @@ namespace PasswordManager.Views
             }
         }
 
-        // Sprawdzenie hasła dla wybranego profilu
+        
         private bool AuthenticateProfile(string profileName, string password)
         {
             string profilePath = System.IO.Path.Combine(ProfilesDirectory, $"{profileName}.psmgr");
@@ -134,17 +134,15 @@ namespace PasswordManager.Views
                 return false;
             }
 
-            // Odczytaj zaszyfrowane hasło z pliku (pierwsza linia)
+           
             string storedHash = File.ReadLines(profilePath).First();
 
-            // Utwórz EncryptionManager dla SHA256
             var encryptionManager = new EncryptionManager(EncryptionMethod.SHA256);
 
-            // Porównaj wprowadzone hasło z zapisanym
             return encryptionManager.VerifyHash(password, storedHash);
         }
 
-        // Funkcja do haszowania hasła
+        
         //private string HashPassword(string password)
         //{
         //    using (SHA256 sha256 = SHA256.Create())
