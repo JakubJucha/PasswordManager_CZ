@@ -65,6 +65,16 @@ namespace PasswordManager.Views
             Close();
         }
 
+        private void txtPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (PasswordStrength != null)
+            {
+                PasswordStrength.UpdateStrength(txtPassword.Password);
+            }
+        }
+
+
+
 
         //private string EncryptPassword(string password)
         //{

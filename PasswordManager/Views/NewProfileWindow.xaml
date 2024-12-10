@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PasswordManager.Views"
+        xmlns:local="clr-namespace:PasswordManager.Views" xmlns:controls="clr-namespace:PasswordManager.Components"
         mc:Ignorable="d"
-     Title="Nowy Profil" Height="200" Width="300" WindowStartupLocation="CenterOwner">
+     Title="Nowy Profil" Height="240" Width="320" WindowStartupLocation="CenterOwner">
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -24,14 +25,15 @@
 
         <!-- Hasło -->
         <TextBlock Text="Hasło:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="5"/>
-        <PasswordBox x:Name="txtPassword" Grid.Row="1" Grid.Column="1" Margin="5" />
+        <PasswordBox x:Name="txtPassword" Grid.Row="1" Grid.Column="1" Margin="5" PasswordChanged="txtPassword_PasswordChanged" />
 
         <!-- Potwierdzenie hasła -->
         <TextBlock Text="Potwierdź hasło:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="5"/>
         <PasswordBox x:Name="txtConfirmPassword" Grid.Row="2" Grid.Column="1" Margin="5" />
-
+        <!-- Komponent siły hasła -->
+        <controls:PasswordStrengthControl x:Name="PasswordStrength" Grid.Row="3" Grid.ColumnSpan="2"/>
         <!-- Przyciski -->
-        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
             <Button Content="Utwórz" Width="75" Margin="5" Click="btnCreate_Click" />
             <Button Content="Anuluj" Width="75" Margin="5" Click="btnCancel_Click" />
         </StackPanel>
