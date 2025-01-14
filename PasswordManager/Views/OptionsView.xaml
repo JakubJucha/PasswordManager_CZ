@@ -34,10 +34,11 @@
                   Width="200"
                   HorizontalAlignment="Left"
                   VerticalAlignment="Top"
-                  Margin="0,5,0,0">
+                  Margin="0,5,0,0" SelectionChanged="EncryptionMethodComboBox_SelectionChanged">
             <!-- Elementy listy -->
             <ComboBoxItem Content="AES" IsSelected="True" />
-        </ComboBox>
+                <ComboBoxItem Content="HMAC" />
+            </ComboBox>
         </StackPanel>
     </Grid>
 </UserControl>

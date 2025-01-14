@@ -11,7 +11,8 @@ namespace PasswordManager
 {
     public class ProfileInfo
     {
-    
+        public EncryptionMethod EncryptionMethod { get; set; } = EncryptionMethod.AES; 
+
         public string ProfileName { get; set; }
 
         public static readonly string ProfilesDirectory = "Profiles";
@@ -24,7 +25,7 @@ namespace PasswordManager
        
         public string ProfilePassword { get; private set; }
 
-      
+
         public void LoadPasswords()
         {
             if (!File.Exists(ProfilePath))
@@ -38,11 +39,21 @@ namespace PasswordManager
 
             if (lines.Length > 0)
             {
-                ProfilePassword = lines[0]; 
+                var firstLine = lines[0].Split('|');
+                if (firstLine.Length == 2 && Enum.TryParse(firstLine[0], out EncryptionMethod method))
+                {
+                    EncryptionMethod = method; // Odczytujemy metodę szyfrowania
+                    ProfilePassword = firstLine[1]; // Odczytujemy hash hasła
+                }
+                else if (firstLine.Length == 1) // Obsługa starszych plików
+                {
+                    EncryptionMethod = EncryptionMethod.AES; // Domyślnie AES
+                    ProfilePassword = firstLine[0];
+                }
             }
 
             Passwords.Clear();
-            var encryptionManager = new EncryptionManager(PasswordManager.EncryptionMethod.AES);
+            var encryptionManager = new EncryptionManager(EncryptionMethod);
 
             for (int i = 1; i < lines.Length; i++)
             {
@@ -53,36 +64,37 @@ namespace PasswordManager
                     {
                         Name = parts[0],
                         Description = parts[1],
-                        Password = $"{parts[2]}|{parts[3]}", 
-                        DateAdded = DateTime.Now 
+                        Password = $"{parts[2]}|{parts[3]}",
+                        DateAdded = DateTime.Now
                     });
                 }
             }
         }
 
 
-    
+
+
         public void SavePasswords()
         {
             var lines = new List<string>
-            {
-                ProfilePassword 
-            };
+    {
+        $"{EncryptionMethod}|{ProfilePassword}" // Zapisujemy metodę szyfrowania obok hash-a
+    };
 
             foreach (var entry in Passwords)
             {
-            
                 lines.Add(entry.Password.Contains('|')
-                    ? $"{entry.Name}|{entry.Description}|{entry.Password}" 
+                    ? $"{entry.Name}|{entry.Description}|{entry.Password}"
                     : throw new InvalidOperationException("Hasło nie jest zaszyfrowane przed zapisem."));
             }
 
             File.WriteAllLines(ProfilePath, lines);
         }
 
+
         public void AddPassword(string name, string description, string plainPassword)
         {
-            var encryptionManager = new EncryptionManager(PasswordManager.EncryptionMethod.AES);
+            var encryptionManager = new EncryptionManager(EncryptionMethod); 
             string encryptedPassword = encryptionManager.Encrypt(plainPassword, ProfilePassword);
 
             var entry = new PasswordEntry
@@ -97,12 +109,39 @@ namespace PasswordManager
             SavePasswords();
         }
 
-      
+
+
         public void RemovePassword(PasswordEntry entry)
         {
             Passwords.Remove(entry);
             SavePasswords();
         }
+
+
+        public void ChangeEncryptionMethod(EncryptionMethod newMethod)
+        {
+            // Odszyfruj wszystkie hasła starą metodą
+            var oldEncryptionManager = new EncryptionManager(EncryptionMethod);
+            var newEncryptionManager = new EncryptionManager(newMethod);
+
+            foreach (var entry in Passwords)
+            {
+                // Odszyfruj hasło starą metodą
+                string decryptedPassword = oldEncryptionManager.Decrypt(entry.Password, ProfilePassword);
+
+                // Zaszyfruj hasło nową metodą
+                entry.Password = newEncryptionManager.Encrypt(decryptedPassword, ProfilePassword);
+            }
+
+            // Zmień metodę szyfrowania w profilu
+            EncryptionMethod = newMethod;
+
+            // Zapisz zaktualizowane dane
+            SavePasswords();
+        }
+
+
+
     }
 
     public class PasswordEntry

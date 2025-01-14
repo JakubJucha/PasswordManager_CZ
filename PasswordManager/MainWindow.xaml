@@ -23,7 +23,11 @@
                 <StackPanel Grid.Row="0">
                     <Button x:Name="btnNavPasswords" Content="Hasła" Command="{Binding NavigateCommand}" CommandParameter="Passwords" Margin="10" Height="40" IsEnabled="False"/>
                     <Button x:Name="btnNavOptions" Content="Opcje" Command="{Binding NavigateCommand}" CommandParameter="Options" Margin="10" Height="40" IsEnabled="False"/>
+                    <Button x:Name="btnNavTests" Content="Testy" Command="{Binding NavigateCommand}" CommandParameter="Tests"  Margin="10" Height="40" />
                 </StackPanel>
+
+                
+
 
                 <!-- Przycisk Wyloguj w drugim wierszu -->
                 <Button x:Name="btnNavLogout" Content="Wyloguj" Command="{Binding NavigateCommand}" CommandParameter="Logout"

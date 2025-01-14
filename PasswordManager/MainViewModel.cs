@@ -45,22 +45,26 @@ namespace PasswordManager
                     CurrentView = new PasswordsView();
                     break;
                 case "Options":
-                    CurrentView = new OptionsView();
+                   
+                    CurrentView = new OptionsView(this);
+                    break;
+                case "Tests":
+                    CurrentView = new TestView();
                     break;
                 case "Logout":
                     CurrentView = new LoginView();
-
                     if (MainWindow != null)
                     {
                         MainWindow.btnNavLogout.IsEnabled = false;
                         MainWindow.btnNavOptions.IsEnabled = false;
                         MainWindow.btnNavPasswords.IsEnabled = false;
                     }
-
                     CurrentProfile = new ProfileInfo();
                     break;
             }
         }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

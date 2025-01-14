@@ -71,28 +71,23 @@ namespace PasswordManager
             {
                 try
                 {
-                  
-                    var encryptionManager = new EncryptionManager(EncryptionMethod.AES);
+                    // Używamy metody szyfrowania z profilu
+                    var encryptionManager = new EncryptionManager(CurrentProfile.EncryptionMethod);
                     string decryptedPassword = encryptionManager.Decrypt(selectedEntry.Password, CurrentProfile.ProfilePassword);
 
-                   
                     Clipboard.SetText(decryptedPassword);
 
                     MessageBox.Show("Skopiowano odszyfrowane hasło. Zostanie usunięte ze schowka po 30 sekundach.",
                         "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                  
                     var timer = new System.Windows.Threading.DispatcherTimer
                     {
-                        Interval = TimeSpan.FromSeconds(30) 
+                        Interval = TimeSpan.FromSeconds(30)
                     };
 
                     timer.Tick += (s, args) =>
                     {
-                      
                         Clipboard.Clear();
-
-                      
                         timer.Stop();
                     };
 
@@ -104,5 +99,6 @@ namespace PasswordManager
                 }
             }
         }
+
     }
 }

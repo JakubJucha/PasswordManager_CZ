@@ -49,11 +49,12 @@ namespace PasswordManager.Views
 
                 string profilePath = System.IO.Path.Combine(ProfilesDirectory, $"{newProfileWindow.ProfileName}.psmgr");
 
-        
                 var encryptionManager = new EncryptionManager(EncryptionMethod.SHA256);
                 string hashedPassword = encryptionManager.Hash(newProfileWindow.ProfilePassword);
 
-                File.WriteAllText(profilePath, hashedPassword);
+                // Zapisujemy metodę szyfrowania jako prefiks
+                string defaultEncryptionMethod = EncryptionMethod.AES.ToString();
+                File.WriteAllText(profilePath, $"{defaultEncryptionMethod}|{hashedPassword}");
 
                 cbxProfileSelector.Items.Add(newProfileWindow.ProfileName);
 
@@ -62,7 +63,8 @@ namespace PasswordManager.Views
         }
 
 
-      
+
+
         private void LoadProfiles()
         {
             if (!Directory.Exists(ProfilesDirectory))
@@ -123,7 +125,6 @@ namespace PasswordManager.Views
             }
         }
 
-        
         private bool AuthenticateProfile(string profileName, string password)
         {
             string profilePath = System.IO.Path.Combine(ProfilesDirectory, $"{profileName}.psmgr");
@@ -134,15 +135,30 @@ namespace PasswordManager.Views
                 return false;
             }
 
-           
-            string storedHash = File.ReadLines(profilePath).First();
+            string storedLine = File.ReadLines(profilePath).First();
 
-            var encryptionManager = new EncryptionManager(EncryptionMethod.SHA256);
+            // Rozdzielamy metodę szyfrowania i hash hasła
+            var parts = storedLine.Split('|');
+            if (parts.Length == 2)
+            {
+                if (Enum.TryParse(parts[0], out EncryptionMethod method))
+                {
+                    var encryptionManager = new EncryptionManager(EncryptionMethod.SHA256);
+                    return encryptionManager.VerifyHash(password, parts[1]);
+                }
+            }
+            else if (parts.Length == 1) // Obsługa starszego formatu pliku bez metody szyfrowania
+            {
+                var encryptionManager = new EncryptionManager(EncryptionMethod.SHA256);
+                return encryptionManager.VerifyHash(password, storedLine);
+            }
 
-            return encryptionManager.VerifyHash(password, storedHash);
+            MessageBox.Show("Nieprawidłowy format pliku profilu.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
         }
 
-        
+
+
         //private string HashPassword(string password)
         //{
         //    using (SHA256 sha256 = SHA256.Create())

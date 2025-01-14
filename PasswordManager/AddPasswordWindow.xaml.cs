@@ -22,6 +22,7 @@ namespace PasswordManager
         public string PasswordName { get; private set; }
         public string PasswordDescription { get; private set; }
         public string Password { get; private set; }
+        public string RepeatPassword { get; private set; }
         public AddPasswordWindow()
         {
             InitializeComponent();
@@ -32,10 +33,17 @@ namespace PasswordManager
             PasswordName = txtName.Text;
             PasswordDescription = txtDescription.Text;
             Password = txtPassword.Password; 
+            RepeatPassword = txtConfirmPassword.Password; 
 
             if (string.IsNullOrEmpty(PasswordName) || string.IsNullOrEmpty(Password))
             {
                 MessageBox.Show("Nazwa i hasło są wymagane.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (Password!=RepeatPassword)
+            {
+                MessageBox.Show("Hasła nie są identyczne.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 

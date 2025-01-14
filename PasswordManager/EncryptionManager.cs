@@ -8,7 +8,8 @@ namespace PasswordManager
     public enum EncryptionMethod
     {
         SHA256,
-        AES 
+        AES,
+        HMAC
     }
 
     public class EncryptionManager
@@ -38,31 +39,35 @@ namespace PasswordManager
             return Hash(input) == hash;
         }
 
-      
+
         public string Encrypt(string input, string key)
         {
             switch (_method)
             {
                 case EncryptionMethod.AES:
                     return EncryptAES(input, key);
+                case EncryptionMethod.HMAC:
+                    return EncryptHMAC(input, key);
                 default:
                     throw new NotSupportedException($"Metoda szyfrowania {_method} nie jest obsługiwana.");
             }
         }
 
-      
         public string Decrypt(string encryptedInput, string key)
         {
             switch (_method)
             {
                 case EncryptionMethod.AES:
                     return DecryptAES(encryptedInput, key);
+                case EncryptionMethod.HMAC:
+                    return DecryptHMAC(encryptedInput, key);
                 default:
                     throw new NotSupportedException($"Metoda szyfrowania {_method} nie jest obsługiwana.");
             }
         }
 
-      
+
+
         private string HashSHA256(string input)
         {
             using (var sha256 = SHA256.Create())
@@ -117,6 +122,43 @@ namespace PasswordManager
                 return Encoding.UTF8.GetString(plainBytes);
             }
         }
+
+        private string EncryptHMAC(string plainText, string key)
+        {
+            using (var hmac = new HMACSHA256(GenerateKey(key)))
+            {
+                byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
+                byte[] hashBytes = hmac.ComputeHash(plainBytes);
+
+                string hashBase64 = Convert.ToBase64String(hashBytes);
+                string plainTextBase64 = Convert.ToBase64String(plainBytes);
+
+                return $"{plainTextBase64}|{hashBase64}";
+            }
+        }
+
+        private string DecryptHMAC(string encryptedInput, string key)
+        {
+            var parts = encryptedInput.Split('|');
+            if (parts.Length != 2)
+                throw new FormatException("Niepoprawny format zaszyfrowanych danych HMAC.");
+
+            string plainTextBase64 = parts[0];
+            string storedHashBase64 = parts[1];
+
+            byte[] plainBytes = Convert.FromBase64String(plainTextBase64);
+            byte[] storedHash = Convert.FromBase64String(storedHashBase64);
+
+            using (var hmac = new HMACSHA256(GenerateKey(key)))
+            {
+                byte[] computedHash = hmac.ComputeHash(plainBytes);
+                if (!computedHash.SequenceEqual(storedHash))
+                    throw new CryptographicException("Błąd weryfikacji HMAC. Dane mogły zostać zmodyfikowane.");
+            }
+
+            return Encoding.UTF8.GetString(plainBytes);
+        }
+
 
         private byte[] GenerateKey(string key)
         {
