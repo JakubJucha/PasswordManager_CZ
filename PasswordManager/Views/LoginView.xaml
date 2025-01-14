@@ -7,54 +7,53 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <!-- Wyśrodkowanie zawartości -->
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <!-- Górny pusty wiersz -->
+          
             <RowDefinition Height="Auto" />
-            <!-- Główna zawartość -->
+           
             <RowDefinition Height="*" />
-            <!-- Dolny pusty wiersz -->
+           
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <!-- Lewy pusty obszar -->
+           
             <ColumnDefinition Width="Auto" />
-            <!-- Główna zawartość -->
+           
             <ColumnDefinition Width="*" />
-            <!-- Prawy pusty obszar -->
+           
         </Grid.ColumnDefinitions>
 
-        <!-- Główna zawartość na środku -->
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <!-- Combobox + przycisk -->
+               
                 <RowDefinition Height="20" />
-                <!-- Odstęp -->
+              
                 <RowDefinition Height="Auto" />
-                <!-- Pole hasła -->
+               
                 <RowDefinition Height="20" />
-                <!-- Odstęp -->
+               
                 <RowDefinition Height="Auto" />
-                <!-- Przycisk Zaloguj -->
+               
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <!-- Cała szerokość dla wyrównania -->
+              
             </Grid.ColumnDefinitions>
 
-            <!-- Combobox i przycisk NewProfile -->
+            
             <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
                 <ComboBox x:Name="cbxProfileSelector" Width="200" Height="30" Margin="0,0,10,0" 
                           VerticalAlignment="Center"/>
                 <Button x:Name="btnNewProfile" Content="Nowy profil" Width="100" Height="30" VerticalAlignment="Center" Click="btnNewProfile_Click"/>
             </StackPanel>
 
-            <!-- Pole hasła -->
+            
             <PasswordBox x:Name="PasswordField" Grid.Row="2"  Height="30" HorizontalAlignment="Stretch"/>
 
-            <!-- Przycisk Zaloguj -->
+            
             <Button x:Name="btnLogin" Content="Zaloguj" Grid.Row="4" Width="100" Height="30" HorizontalAlignment="Right"
                     Margin="0,0,0,0" Click="btnLogin_Click"/>
         </Grid>

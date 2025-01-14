@@ -25,7 +25,7 @@ namespace PasswordManager
             InitializeComponent();
         }
 
-        // Test wydajności szyfrowania
+        
         private void RunPerformanceTest_Click(object sender, RoutedEventArgs e)
         {
             var encryptionManagerAES = new EncryptionManager(EncryptionMethod.AES);
@@ -58,7 +58,7 @@ namespace PasswordManager
             sw.Stop();
             long hmacDecryptionTime = sw.ElapsedMilliseconds;
 
-            // Wyświetl wyniki
+           
             ResultsBox.Text = $"Test wydajności szyfrowania:\n" +
                               $"AES - Szyfrowanie: {aesEncryptionTime} ms, Deszyfrowanie: {aesDecryptionTime} ms\n" +
                               $"HMAC - Szyfrowanie: {hmacEncryptionTime} ms, Deszyfrowanie: {hmacDecryptionTime} ms\n";
@@ -66,7 +66,7 @@ namespace PasswordManager
 
         
 
-        // Funkcja brute-force z limitem czasu
+       
         private string BruteForce(EncryptionManager manager, string encryptedPassword, string key, int maxLength, int timeLimitMs)
         {
             var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -87,14 +87,14 @@ namespace PasswordManager
                 }
                 catch
                 {
-                    // Ignorujemy błędy deszyfrowania
+                   
                 }
             }
 
-            return ""; // Jeśli nie udało się złamać
+            return ""; 
         }
 
-        // Generowanie kombinacji znaków o określonej długości
+        
         private IEnumerable<string> GetCombinations(string chars, int maxLength)
         {
             return Enumerable.Range(1, maxLength)
@@ -117,7 +117,7 @@ namespace PasswordManager
             }
         }
 
-        // Test łamania haseł użytkownika
+      
         private void RunPasswordStrengthTest_Click(object sender, RoutedEventArgs e)
         {
             string weakPassword = "123";
@@ -139,25 +139,25 @@ namespace PasswordManager
             ResultsBox.Text += TestPasswordStrength(encryptionManagerHMAC, encryptedWeakHMAC, encryptedStrongHMAC, "key");
         }
 
-        // Funkcja testująca czas łamania słabego i silnego hasła
+      
         private string TestPasswordStrength(EncryptionManager manager, string weakPassword, string strongPassword, string key)
         {
             var sw = new Stopwatch();
             string result = "";
 
-            // Test słabego hasła
+            
             sw.Start();
             BruteForce(manager, weakPassword, key, 3, 60000);
             sw.Stop();
             long weakTime = sw.ElapsedMilliseconds;
 
-            // Test silnego hasła
+            
             sw.Restart();
             BruteForce(manager, strongPassword, key, 6, 60000);
             sw.Stop();
             long strongTime = sw.ElapsedMilliseconds;
 
-            result += $"Słabe hasło: {weakTime} ms, Silne hasło: {strongTime} ms\n";
+            result += $"Słabsze hasło: {weakTime} ms, silniejsze hasło: {strongTime} ms\n";
             return result;
         }
     }

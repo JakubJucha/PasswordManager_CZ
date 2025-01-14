@@ -22,7 +22,7 @@ namespace PasswordManager
     {
         private MainViewModel _mainViewModel;
 
-        // Konstruktor przyjmujący MainViewModel
+      
         public OptionsView(MainViewModel mainViewModel)
         {
             InitializeComponent();
@@ -34,7 +34,7 @@ namespace PasswordManager
 
             _mainViewModel = mainViewModel;
 
-            // Synchronizacja ComboBox z aktualną metodą szyfrowania
+           
             var currentMethod = _mainViewModel.CurrentProfile.EncryptionMethod;
             EncryptionMethodComboBox.SelectedItem = EncryptionMethodComboBox.Items
                 .Cast<ComboBoxItem>()
@@ -42,7 +42,7 @@ namespace PasswordManager
         }
 
 
-        // Obsługa zmiany wyboru w ComboBox
+      
         private void EncryptionMethodComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_mainViewModel == null)
@@ -55,7 +55,7 @@ namespace PasswordManager
                 string method = selectedItem.Content.ToString();
                 if (Enum.TryParse<EncryptionMethod>(method, out var newMethod))
                 {
-                    // Sprawdzamy, czy użytkownik faktycznie zmienił metodę
+                   
                     if (newMethod != _mainViewModel.CurrentProfile.EncryptionMethod)
                     {
                         var result = MessageBox.Show(
@@ -88,7 +88,7 @@ namespace PasswordManager
                                     MessageBoxImage.Error
                                 );
 
-                                // Przywracamy poprzedni wybór w ComboBox
+                               
                                 EncryptionMethodComboBox.SelectedItem = EncryptionMethodComboBox.Items
                                     .Cast<ComboBoxItem>()
                                     .FirstOrDefault(i => i.Content.ToString() == _mainViewModel.CurrentProfile.EncryptionMethod.ToString());
@@ -96,7 +96,6 @@ namespace PasswordManager
                         }
                         else
                         {
-                            // Przywracamy poprzedni wybór w ComboBox
                             EncryptionMethodComboBox.SelectedItem = EncryptionMethodComboBox.Items
                                 .Cast<ComboBoxItem>()
                                 .FirstOrDefault(i => i.Content.ToString() == _mainViewModel.CurrentProfile.EncryptionMethod.ToString());

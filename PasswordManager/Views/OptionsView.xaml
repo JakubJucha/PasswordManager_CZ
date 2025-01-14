@@ -10,11 +10,11 @@
         
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <!-- Dla etykiety -->
+            
             <RowDefinition Height="Auto" />
-            <!-- Dla listy rozwijanej -->
+            
             <RowDefinition Height="*" />
-            <!-- Wypełnienie reszty przestrzeni -->
+            
         </Grid.RowDefinitions>
         
         <TextBlock Text="Opcje szyfrowania" 
@@ -35,7 +35,7 @@
                   HorizontalAlignment="Left"
                   VerticalAlignment="Top"
                   Margin="0,5,0,0" SelectionChanged="EncryptionMethodComboBox_SelectionChanged">
-            <!-- Elementy listy -->
+           
             <ComboBoxItem Content="AES" IsSelected="True" />
                 <ComboBoxItem Content="HMAC" />
             </ComboBox>

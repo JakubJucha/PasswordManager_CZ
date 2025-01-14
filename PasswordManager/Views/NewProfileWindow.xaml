@@ -19,20 +19,19 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- Nazwa profilu -->
+      
         <TextBlock Text="Nazwa profilu:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="5"/>
         <TextBox x:Name="txtProfileName" Grid.Row="0" Grid.Column="1" Margin="5" />
 
-        <!-- Hasło -->
         <TextBlock Text="Hasło:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="5"/>
         <PasswordBox x:Name="txtPassword" Grid.Row="1" Grid.Column="1" Margin="5" PasswordChanged="txtPassword_PasswordChanged" />
 
-        <!-- Potwierdzenie hasła -->
+       
         <TextBlock Text="Potwierdź hasło:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="5"/>
         <PasswordBox x:Name="txtConfirmPassword" Grid.Row="2" Grid.Column="1" Margin="5" />
-        <!-- Komponent siły hasła -->
+       
         <controls:PasswordStrengthControl x:Name="PasswordStrength" Grid.Row="3" Grid.ColumnSpan="2"/>
-        <!-- Przyciski -->
+       
         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
             <Button Content="Utwórz" Width="75" Margin="5" Click="btnCreate_Click" />
             <Button Content="Anuluj" Width="75" Margin="5" Click="btnCancel_Click" />

@@ -56,7 +56,7 @@ namespace PasswordManager
                 CurrentProfile.AddPassword(
                     addPasswordWindow.PasswordName,
                     addPasswordWindow.PasswordDescription,
-                    addPasswordWindow.Password // Pobierz hasło
+                    addPasswordWindow.Password 
                 );
 
                
@@ -73,14 +73,14 @@ namespace PasswordManager
             {
                 try
                 {
-                    // Zatrzymaj aktywny licznik (jeśli istnieje)
+                  
                     if (activeTimer != null)
                     {
                         activeTimer.Stop();
                         activeTimer = null;
                     }
 
-                    // Używamy metody szyfrowania z profilu
+                    
                     var encryptionManager = new EncryptionManager(CurrentProfile.EncryptionMethod);
                     string decryptedPassword = encryptionManager.Decrypt(selectedEntry.Password, CurrentProfile.ProfilePassword);
 
@@ -99,17 +99,17 @@ namespace PasswordManager
             }
             else
             {
-                // Wyłącz przycisk usuwania, jeśli nic nie jest wybrane
+              
                 btnDeletePassword.IsEnabled = false;
             }
         }
 
         private void StartClipboardCountdown(string message)
         {
-            const int countdownTime = 30; // 30 sekund
+            const int countdownTime = 30; 
             int remainingTime = countdownTime;
 
-            // Zatrzymaj aktywny licznik, jeśli istnieje
+            
             if (activeTimer != null)
             {
                 activeTimer.Stop();
@@ -120,7 +120,7 @@ namespace PasswordManager
             progressClipboard.Value = countdownTime;
             progressClipboard.Visibility = Visibility.Visible;
 
-            // Tworzenie nowego licznika
+           
             activeTimer = new System.Windows.Threading.DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
@@ -138,7 +138,7 @@ namespace PasswordManager
                     lblClipboardInfo.Content = "Schowek został wyczyszczony.";
                     progressClipboard.Visibility = Visibility.Collapsed;
                     activeTimer.Stop();
-                    activeTimer = null; // Zresetuj licznik
+                    activeTimer = null; 
                 }
             };
 
@@ -163,21 +163,20 @@ namespace PasswordManager
             {
                 try
                 {
-                    // Usuń aktywny licznik (jeśli istnieje)
+                    
                     if (activeTimer != null)
                     {
                         activeTimer.Stop();
                         activeTimer = null;
                     }
 
-                    // Usuń hasło z profilu
                     CurrentProfile.RemovePassword(selectedEntry);
 
-                    // Odśwież tabelkę
+                   
                     PasswordsGrid.ItemsSource = null;
                     PasswordsGrid.ItemsSource = CurrentProfile.Passwords;
 
-                    // Wyczyszczenie schowka i reset widoku
+                   
                     Clipboard.Clear();
                     lblClipboardInfo.Content = "Wybierz hasło, aby je skopiować";
                     progressClipboard.Visibility = Visibility.Collapsed;

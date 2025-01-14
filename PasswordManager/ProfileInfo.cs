@@ -42,12 +42,12 @@ namespace PasswordManager
                 var firstLine = lines[0].Split('|');
                 if (firstLine.Length == 2 && Enum.TryParse(firstLine[0], out EncryptionMethod method))
                 {
-                    EncryptionMethod = method; // Odczytujemy metodę szyfrowania
-                    ProfilePassword = firstLine[1]; // Odczytujemy hash hasła
+                    EncryptionMethod = method; 
+                    ProfilePassword = firstLine[1]; 
                 }
-                else if (firstLine.Length == 1) // Obsługa starszych plików
+                else if (firstLine.Length == 1) 
                 {
-                    EncryptionMethod = EncryptionMethod.AES; // Domyślnie AES
+                    EncryptionMethod = EncryptionMethod.AES; 
                     ProfilePassword = firstLine[0];
                 }
             }
@@ -58,7 +58,7 @@ namespace PasswordManager
             for (int i = 1; i < lines.Length; i++)
             {
                 var parts = lines[i].Split('|');
-                if (parts.Length == 4) //Name|Description|IV|CipherText
+                if (parts.Length == 4)
                 {
                     Passwords.Add(new PasswordEntry
                     {
@@ -78,7 +78,7 @@ namespace PasswordManager
         {
             var lines = new List<string>
     {
-        $"{EncryptionMethod}|{ProfilePassword}" // Zapisujemy metodę szyfrowania obok hash-a
+        $"{EncryptionMethod}|{ProfilePassword}"
     };
 
             foreach (var entry in Passwords)
@@ -120,23 +120,22 @@ namespace PasswordManager
 
         public void ChangeEncryptionMethod(EncryptionMethod newMethod)
         {
-            // Odszyfruj wszystkie hasła starą metodą
+           
             var oldEncryptionManager = new EncryptionManager(EncryptionMethod);
             var newEncryptionManager = new EncryptionManager(newMethod);
 
             foreach (var entry in Passwords)
             {
-                // Odszyfruj hasło starą metodą
+                
                 string decryptedPassword = oldEncryptionManager.Decrypt(entry.Password, ProfilePassword);
 
-                // Zaszyfruj hasło nową metodą
+              
                 entry.Password = newEncryptionManager.Encrypt(decryptedPassword, ProfilePassword);
             }
 
-            // Zmień metodę szyfrowania w profilu
+           
             EncryptionMethod = newMethod;
 
-            // Zapisz zaktualizowane dane
             SavePasswords();
         }
 

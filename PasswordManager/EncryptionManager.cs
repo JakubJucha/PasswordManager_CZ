@@ -82,7 +82,7 @@ namespace PasswordManager
         {
             using (var aes = Aes.Create())
             {
-                aes.Key = GenerateKey(key); // Upewnij się, że klucz ma odpowiednią długość
+                aes.Key = GenerateKey(key); 
                 aes.GenerateIV();
                 byte[] iv = aes.IV;
 
