@@ -56,5 +56,47 @@ namespace PasswordManager
             DialogResult = false;
             Close();
         }
+
+        private void txtPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (PasswordStrength != null)
+            {
+                PasswordStrength.UpdateStrength(txtPassword.Password);
+            }
+        }
+
+        private void GeneratePassword_Click(object sender, RoutedEventArgs e)
+        {
+            string generatedPassword = GeneratePassword(16, 20);
+            txtPassword.Password = generatedPassword;
+            txtConfirmPassword.Password = generatedPassword;
+        }
+
+        private string GeneratePassword(int minLength, int maxLength)
+        {
+            const string upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string lowerCase = "abcdefghijklmnopqrstuvwxyz";
+            const string digits = "0123456789";
+            const string specialCharacters = "!@#$%^&*()-_=+[]{}|;:,.<>?";
+            const string allCharacters = upperCase + lowerCase + digits + specialCharacters;
+
+            Random random = new Random();
+            int passwordLength = random.Next(minLength, maxLength + 1);
+
+            var password = new StringBuilder();
+            password.Append(upperCase[random.Next(upperCase.Length)]);
+            password.Append(lowerCase[random.Next(lowerCase.Length)]);
+            password.Append(digits[random.Next(digits.Length)]);
+            password.Append(specialCharacters[random.Next(specialCharacters.Length)]);
+
+
+            for (int i = 4; i < passwordLength; i++)
+            {
+                password.Append(allCharacters[random.Next(allCharacters.Length)]);
+            }
+
+
+            return new string(password.ToString().OrderBy(c => random.Next()).ToArray());
+        }
     }
 }

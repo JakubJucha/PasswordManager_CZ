@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PasswordManager"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="PasswordManager.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="PasswordManager" Height="450" Width="800">
     <DockPanel>
         <!-- Panel boczny -->
         <DockPanel DockPanel.Dock="Left" Width="Auto" Background="LightGray">
